@@ -29,8 +29,6 @@ export const profileSlice = createSlice({
       phone: '',
       location: false,
       git: '',
-      uploadedCv: undefined,
-      uploadedCover: undefined,
       about: '',
       isFieldDirty: {
         firstName: false,
@@ -55,28 +53,12 @@ export const profileSlice = createSlice({
   reducers: {
     addProfileData: (state, action) => {
       let payload = action.payload;
-
-      if (payload.isFile) {
-        const formData = new FormData();
-        if (payload.uploadedCv) {
-          let { uploadedCv, available } = payload;
-          available = { ...state.profile.available, ...available };
-          formData.append('file', uploadedCv);
-          formData.append("filename", uploadedCv.name)
-          state.profile = { ...state.profile, available, ...{ uploadedCv: formData } };
-        } else {
-          let { uploadedCover } = payload;
-          formData.append('file', uploadedCover);
-          formData.append("filename", uploadedCover.name)
-          state.profile = { ...state.profile, ...{ uploadedCover: formData } };
-        }
-      } else {
-        let { available, isFieldDirty, ...rest } = payload;
-        available = { ...state.profile.available, ...available };
-        isFieldDirty = { ...state.profile.isFieldDirty, ...isFieldDirty };
-        state.profile = { ...state.profile, available, isFieldDirty, ...rest }
-      }
+      let { available, isFieldDirty, ...rest } = payload;
+      available = { ...state.profile.available, ...available };
+      isFieldDirty = { ...state.profile.isFieldDirty, ...isFieldDirty };
+      state.profile = { ...state.profile, available, isFieldDirty, ...rest }
     },
+
     [addProfile.pending]: (state, _) => {
       state.error = null;
       state.loading = true;
@@ -99,8 +81,6 @@ export const profileSlice = createSlice({
         phone: '',
         location: false,
         git: '',
-        uploadedCv: undefined,
-        uploadedCover: undefined,
         about: '',
         isFieldDirty: {
           firstName: false,

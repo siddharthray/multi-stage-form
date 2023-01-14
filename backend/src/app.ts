@@ -23,7 +23,8 @@ interface Response {
     email: string,
     phone: number,
     location: boolean,
-    uploadCv: object,
+    git: string,
+    resume: object,
     uploadCover: object | null
     about: string
 
@@ -38,18 +39,23 @@ router.get('/', function (req, res) {
 
 router.post('/api/post', (req, res) => {
 
-    const { firstName, lastName, email, phone, location, git, uploadCv, uploadCover = null, about } = req.body;
+    const { firstName, lastName, email, phone, location, git, resume, uploadCover = null, about } = req.body;
     let formObject: Response = {
         firstName,
         lastName,
         email,
         phone,
         location,
-        uploadCv,
+        git,
+        resume,
         uploadCover,
         about
     }
-    if (!firstName || !email || !about) {
+    if (!firstName ||
+        !email ||
+        !about ||
+        !resume ||
+        !git) {
         return res.status(400).json({ err: "Validation failed" })
     }
     return res.status(201).json({ data: formObject, msg: "submitted" })

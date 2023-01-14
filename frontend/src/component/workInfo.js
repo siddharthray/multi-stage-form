@@ -2,31 +2,24 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addProfileData } from "../store/profile";
 
-function WorkInfo() {
+function WorkInfo({ setCv, setCover }) {
 
     const profile = useSelector((state) => state.profile.profile);
 
     const [input, setInput] = useState({});
+
     // const [isFilePicked, setIsFilePicked] = useState(false);
 
     const dispatch = useDispatch();
 
     const handleChange = (e) => {
         e.preventDefault();
-        if (e.target.name === "uploadedCv" || e.target.name === "uploadedCover") {
-            if (e.target.name === "uploadedCv") {
-                setInput({
-                    [e.target.name]: e.target.files[0],
-                    isFile: true,
-                    available: { [e.target.name]: true },
-                    isFieldDirty: { [e.target.name]: true }
-                })
-            } else {
-                setInput({
-                    [e.target.name]: e.target.files[0],
-                    isFile: true,
-                })
-            }
+        if (e.target.name === "resume") {
+            setCv({ [e.target.name]: e.target.files[0] });
+            setInput({
+                available: { [e.target.name]: true },
+                isFieldDirty: { [e.target.name]: true }
+            })
         } else {
             if (e.target.value.trim() === '') {
                 setInput({
@@ -42,6 +35,9 @@ function WorkInfo() {
                         isFieldDirty: { [e.target.name]: true }
                     })
                     return;
+                }
+                if (e.target.name === 'uploadCover') {
+                    setCover({ [e.target.name]: e.target.files[0] });
                 }
                 setInput({
                     [e.target.name]: e.target.value,
@@ -77,7 +73,7 @@ function WorkInfo() {
             />
             <input
                 type="file"
-                name="uploadedCv"
+                name="resume"
                 placeholder="Upload CV..."
                 className={profile.available.uploadedCv || !profile.isFieldDirty.uploadedCv ? 'inputField' : 'inputFieldErr'}
                 onChange={handleChange}

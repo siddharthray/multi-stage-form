@@ -9,8 +9,9 @@ import { addProfile, resetStore } from "../store/profile";
 function Form() {
     const [page, setPage] = useState(0);
     const [submitted, setSubmitted] = useState(false);
+    const [cv, setCv] = useState({});
+    const [cover, setCover] = useState({});
     const profile = useSelector((state) => state.profile.profile);
-    const loading = useSelector((state) => state.profile.loading);
     const dispatch = useDispatch();
 
     const FormTitles = ["Basic Details", "Professional Details"];
@@ -24,14 +25,14 @@ function Form() {
         }
         if (page === 1) {
             if (!profile.available.git
-                || !profile.available.uploadedCv
+                || !profile.available.resume
                 || !profile.available.about) {
                 alert("Please fill the required details")
                 return;
             }
             console.log("profile data ", profile)
             dispatch(
-                addProfile(profile)
+                addProfile({ ...profile, resume: cv.resume, cover: cover.uploadedCover })
             );
             setSubmitted(true)
             setPage((currPage) => currPage + 1);
@@ -43,7 +44,7 @@ function Form() {
         if (page === 0) {
             return <BasicInfo />;
         } else if (page === 1) {
-            return <WorkInfo />;
+            return <WorkInfo setCv={setCv} setCover={setCover} />;
         } else {
             return <Notification />
         }
