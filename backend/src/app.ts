@@ -17,17 +17,42 @@ app.use(express.urlencoded({ extended: false }));
 const PORT = process.env.PORT || 3001;
 
 
+interface Response {
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone: number,
+    location: boolean,
+    uploadCv: object,
+    uploadCover: object | null
+    about: string
+
+}
+
+
 router.get('/', function (req, res) {
     console.log("running successfully");
     res.end();
 })
 
+
 router.post('/api/post', (req, res) => {
+
     const { firstName, lastName, email, phone, location, git, uploadCv, uploadCover = null, about } = req.body;
-    console.log(req.body);
-    setTimeout(() => {
-        res.status(201).json({ data: req.body, msg: "submitted" })
-    }, 3000)
+    let formObject: Response = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        location,
+        uploadCv,
+        uploadCover,
+        about
+    }
+    if (!firstName || !email || !about) {
+        return res.status(400).json({ err: "Validation failed" })
+    }
+    return res.status(201).json({ data: formObject, msg: "submitted" })
 })
 
 app.use(router);
